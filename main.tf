@@ -15,7 +15,7 @@ resource "google_storage_bucket" "static-site" {
     response_header = ["*"]
     max_age_seconds = 3600
   }
-}
+
 
 {
   "type": "external_account",
@@ -29,4 +29,5 @@ resource "google_storage_bucket" "static-site" {
   "service_account_impersonation": {
     "token_lifetime_seconds": 3600
   }
+}
 }
