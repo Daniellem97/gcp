@@ -17,10 +17,22 @@ resource "google_storage_bucket" "static-site" {
   }
 }
 
+# Data source to get available zones
+data "google_compute_zones" "available" {
+  region  = "us-central1"     
+}
+
+# Random shuffle to pick a zone
+resource "random_shuffle" "zone" {
+  input        = data.google_compute_zones.available.names
+  result_count = 1
+}
+
 resource "google_compute_instance" "apps" {
   count        = 8
   name         = "apps-${count.index + 1}"
   machine_type = "f1-micro"
+  zone         = random_shuffle.zone.result[0]
 
   boot_disk {
     initialize_params {
@@ -32,7 +44,6 @@ resource "google_compute_instance" "apps" {
     network = "default"
 
     access_config {
-      // Ephemeral IP
     }
   }
 }
@@ -53,7 +64,6 @@ resource "google_sql_database_instance" "postgres" {
     tier = "db-f1-micro"
 
     ip_configuration {
-
       dynamic "authorized_networks" {
         for_each = google_compute_instance.apps
         iterator = apps
@@ -76,3 +86,4 @@ resource "google_sql_database_instance" "postgres" {
     }
   }
 }
+
