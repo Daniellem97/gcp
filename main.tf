@@ -16,3 +16,9 @@ resource "google_storage_bucket" "static-site" {
     max_age_seconds = 3600
   }
 }
+
+resource "google_project_iam_member" "project" {
+  project = "your-project-id"
+  role    = "roles/editor"
+  member  = "user:jane@example.com"
+}
