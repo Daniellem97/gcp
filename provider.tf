@@ -12,7 +12,9 @@ terraform {
   }
 }
 
-provider "datadog" {
-  validate = false
+provider "datadog" { 
+  validate = true 
+  api_key = var.api_key 
+  app_key = var.app_key 
 }
 
