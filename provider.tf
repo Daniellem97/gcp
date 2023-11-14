@@ -15,3 +15,4 @@ terraform {
 provider "datadog" {
   validate = false
 }
+
