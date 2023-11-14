@@ -13,5 +13,5 @@ terraform {
 }
 
 provider "datadog" {
-validate = false
+validate = true
 }
