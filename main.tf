@@ -17,62 +17,56 @@ resource "google_storage_bucket" "static-site" {
   }
 }
 
-resource "google_compute_instance" "apps" {
-  count        = 8
-  name         = "apps-${count.index + 1}"
-  machine_type = "f1-micro"
-  zone         = "us-west1"
+resource "datadog_monitor" "foo" {
+  name               = "Name for monitor foo"
+  type               = "metric alert"
+  message            = "Monitor triggered. Notify: @hipchat-channel"
+  escalation_message = "Escalation message @pagerduty"
 
-  boot_disk {
-    initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-1804-lts"
-    }
+  query = "avg(last_1h):avg:aws.ec2.cpu{environment:foo,host:foo} by {host} > 4"
+
+  monitor_thresholds {
+    warning  = 2
+    critical = 4
   }
 
-  network_interface {
-    network = "default"
+  include_tags = true
 
-    access_config {
-    }
+  tags = ["foo:bar", "team:fooBar"]
+}
+
+resource "datadog_synthetics_test" "test_uptime" {
+  name      = "An Uptime test on example.org"
+  type      = "api"
+  subtype   = "http"
+  status    = "live"
+  message   = "Notify @pagerduty"
+  locations = ["aws:eu-central-1"]
+  tags      = ["foo:bar", "foo", "env:test"]
+
+  request_definition {
+    method = "GET"
+    url    = "https://www.example.org"
   }
-}
 
-resource "random_id" "db_name_suffix" {
-  byte_length = 4
-}
+  request_headers = {
+    Content-Type = "application/json"
+  }
 
-locals {
-  onprem = ["192.168.1.2", "192.168.2.3"]
-}
+  assertion {
+    type     = "statusCode"
+    operator = "is"
+    target   = "200"
+  }
 
-resource "google_sql_database_instance" "postgres" {
-  name             = "postgres-instance-${random_id.db_name_suffix.hex}"
-  database_version = "POSTGRES_15"
-
-  settings {
-    tier = "db-f1-micro"
-
-    ip_configuration {
-      dynamic "authorized_networks" {
-        for_each = google_compute_instance.apps
-        iterator = apps
-
-        content {
-          name  = apps.value.name
-          value = apps.value.network_interface.0.access_config.0.nat_ip
-        }
-      }
-
-      dynamic "authorized_networks" {
-        for_each = local.onprem
-        iterator = onprem
-
-        content {
-          name  = "onprem-${onprem.key}"
-          value = onprem.value
-        }
-      }
+  options_list {
+    tick_every = 900
+    retry {
+      count    = 2
+      interval = 300
+    }
+    monitor_options {
+      renotify_interval = 120
     }
   }
 }
-
