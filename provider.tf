@@ -13,5 +13,6 @@ terraform {
 }
 
 provider "datadog" {
-validate = true
+validate = false
+api_url = "https://api.datadoghq.eu/"
 }
