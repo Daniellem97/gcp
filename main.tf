@@ -32,7 +32,7 @@ resource "google_compute_instance" "apps" {
   count        = 8
   name         = "apps-${count.index + 1}"
   machine_type = "f1-micro"
-  zone         = random_shuffle.zone.result[0]
+  zone         = "us-west1"
 
   boot_disk {
     initialize_params {
