@@ -3,7 +3,7 @@ resource "google_storage_bucket" "my_bucket" {
   location = "US"
 }
 
-resource "google_sql_database_instance" "default" {
+resource "google_cloud_instance" "default" {
   name             = "example-instance"
   database_version = "MYSQL_5_7"
 
@@ -13,7 +13,7 @@ resource "google_sql_database_instance" "default" {
     ip_configuration {
       authorized_networks {
         name  = "all"
-        value = "0.0.0.0/1"
+        value = "0.0.0.0/0"
       }
     }
   }
