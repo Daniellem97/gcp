@@ -13,7 +13,7 @@ resource "google_sql_database_instance" "default" {
     ip_configuration {
       authorized_networks {
         name  = "all"
-        value = "0.0.0.0/0"
+        value = "0.0.0.0/1"
       }
     }
   }
