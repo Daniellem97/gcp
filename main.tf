@@ -18,7 +18,7 @@ data "google_iam_policy" "admin" {
   }
 }
 
-resource "google_cloud_instance" "default" {
+resource "google_sql_database_instance" "default" {
   name             = "example-instance"
   database_version = "MYSQL_5_7"
     ip_configuration {
