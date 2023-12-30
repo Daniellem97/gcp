@@ -18,12 +18,6 @@ data "google_iam_policy" "admin" {
   }
 }
 
-provider "google" {
-  credentials = file("path/to/your/credentials.json")
-  project     = "your-project-id"
-  region      = "us-central1" # Change this to your desired region
-}
-
 resource "google_sql_database_instance" "example" {
   name             = "example-instance"
   database_version = "MYSQL_5_7"
