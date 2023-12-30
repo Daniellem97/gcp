@@ -4,3 +4,15 @@ provider "google" {
   region      = "europe-west1"
 }
 
+terraform {
+  required_providers {
+    datadog = {
+      source = "DataDog/datadog"
+    }
+  }
+}
+
+provider "datadog" {
+validate = false
+api_url = "https://api.datadoghq.eu/"
+}
