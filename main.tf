@@ -18,13 +18,32 @@ data "google_iam_policy" "admin" {
   }
 }
 
-resource "google_sql_database_instance" "default" {
+provider "google" {
+  credentials = file("path/to/your/credentials.json")
+  project     = "your-project-id"
+  region      = "us-central1" # Change this to your desired region
+}
+
+resource "google_sql_database_instance" "example" {
   name             = "example-instance"
   database_version = "MYSQL_5_7"
+  region           = "us-central1" # Change this to your desired region
+
+  settings {
+    tier = "db-f1-micro"
+
     ip_configuration {
+      ipv4_enabled    = true
       authorized_networks {
-        name  = "all"
-        value = "0.0.0.0/0"
+        name    = "private-network"
+        value   = "0.0.0.0/0"  # Example CIDR block for your private network
       }
     }
   }
+}
+
+resource "google_sql_database" "example" {
+  name     = "example-database"
+  instance = google_sql_database_instance.example.name
+}
+
