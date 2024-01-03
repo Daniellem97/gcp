@@ -22,5 +22,5 @@ resource "datadog_monitor" "foo" {
 
   include_tags = true
 
-  tags = ["foo:bar", "team:fooBar"]
+  tags = ["testingtasksbranch:2", "team:fooBar"]
 }
