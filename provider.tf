@@ -16,8 +16,3 @@ provider "datadog" {
 validate = false
 api_url = "https://api.datadoghq.eu/"
 }
-
-terraform {
-  backend "s3" {
-  }
-}
