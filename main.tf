@@ -7,8 +7,14 @@ labels = {
   }
 }
 
-
-
+resource "google_storage_bucket" "my_bucket2" {
+  name     = "plsplsplsplsplswork"
+  location = "US"
+labels = {
+    app   = "your_app_value"
+    infra = "your_infra_value"
+  }
+}
 
 resource "datadog_monitor" "foo" {
   name               = "Name for monitor foo"
