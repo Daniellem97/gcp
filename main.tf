@@ -8,6 +8,8 @@ labels = {
 }
 
 
+
+
 resource "datadog_monitor" "foo" {
   name               = "Name for monitor foo"
   type               = "metric alert"
