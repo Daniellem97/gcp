@@ -1,6 +1,6 @@
 provider "google" {
   credentials = file("/mnt/workspace/gcp.json")
-  project     = "seraphic-ripple-403315"
+  project     = "optimum-essence-391617"
   region      = "europe-west1"
 }
 
